@@ -7,10 +7,8 @@ import { UsersModule } from './Modules/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeOrm from './config/database.confing'
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderDetailsModule } from './Modules/order_details/order_details.module';
 import { CategoriesModule } from './Modules/categories/categories.module';
 import { OrdersModule } from './Modules/orders/orders.module';
-import { FilesModule } from './Modules/files/files.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SeederModule } from './Modules/seeder/seeder.module';
 
@@ -25,8 +23,8 @@ import { SeederModule } from './Modules/seeder/seeder.module';
       useFactory:(configService: ConfigService)=>
         configService.get('typeorm')
     }),
-    ProductsModule, AuthModule, UsersModule, OrderDetailsModule, 
-    CategoriesModule, OrdersModule, FilesModule, SeederModule,
+    ProductsModule, AuthModule, UsersModule, 
+    CategoriesModule, OrdersModule, SeederModule,
     JwtModule.register({
       global:true,
       signOptions:{expiresIn: '1h'},

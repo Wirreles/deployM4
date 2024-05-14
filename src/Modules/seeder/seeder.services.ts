@@ -1,6 +1,5 @@
 import {
   Injectable,
-  NotAcceptableException,
   OnModuleInit,
 } from '@nestjs/common';
 import * as data from '../../utils/ecommerce-products.json';
@@ -22,17 +21,32 @@ export class SeederService implements OnModuleInit {
   ) {}
 
   async addProductSeeder() {
+    let arrProducts: Products['name'][] = [];
+    
     const products = await this.productRepository.find({
       relations: { orden_details: true },
     });
+    
     for (const product of products) {
-      if (product.orden_details.length !== 0) {
-        throw new NotAcceptableException(
-          'Los productos ya tienen ordenes asignadas',
-        );
-      } else await this.productRepository.delete(product.id);
+      if (product.orden_details.length > 0) {
+        arrProducts.push(product.name);
+      } else {
+        await this.productRepository.delete(product.id);
+      }
     }
+    
     for (const product of data) {
+      let foundMatch = false;
+      for (const name of arrProducts) {
+        if (product.name === name) {
+          foundMatch = true;
+          break;
+        }
+      }
+      if (foundMatch) {
+        continue;
+      }
+    
       const category = await this.categoriesRepository.findOne({
         where: { name: product.category },
       });
@@ -43,7 +57,7 @@ export class SeederService implements OnModuleInit {
       newProduct.stock = product.stock;
       newProduct.imgUrl = product.imgUrl;
       newProduct.category = category;
-
+  
       await this.productRepository
         .createQueryBuilder()
         .insert()
@@ -52,7 +66,12 @@ export class SeederService implements OnModuleInit {
         .orUpdate(['description', 'price', 'stock', 'imgUrl'], ['name'])
         .execute();
     }
-    return { message: 'Productos cargados exitosamente' };
+    if(arrProducts){
+      return { message: 'Productos cargados exitosamente', products: `Estos son los productos que pertenecen a una orden => ${arrProducts} `};
+    } else {
+      return { message: 'Productos cargados exitosamente'}
+    }
+
   }
 
   async addCategoriesSeeder() {

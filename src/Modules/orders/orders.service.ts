@@ -6,9 +6,11 @@ import { OrderDto } from '../../dto/orders.dto';
 import Products from 'src/entities/products.entity';
 import User from 'src/entities/users.entity';
 import OrderDetails from 'src/entities/orders_details.entity';
+import { ProductsDto } from 'src/dto/products.dto';
 
 @Injectable()
 export class OrdersService {
+ 
   constructor(
     @InjectRepository(Order) private ordersRepository: Repository<Order>,
     @InjectRepository(User) private userRepository: Repository<User>,
@@ -54,7 +56,7 @@ export class OrdersService {
     });
 
     await this.ordersRepository.save(newOrder);
-    const allProducts: Products[] = [];
+    const allProductsOrder: Partial<ProductsDto>[] = [];
     let priceTotal = 0;
     for (const product of products) {
       const productItem = await this.productRepository.findOneBy({
@@ -64,14 +66,14 @@ export class OrdersService {
         priceTotal += Number(productItem.price);
         productItem.stock--;
         await this.productRepository.update(productItem.id, productItem);
-        allProducts.push(productItem);
+        allProductsOrder.push(productItem);
       }
     }
 
     const orderDetail: OrderDetails = await this.orderDetailsRepository.create({
       price: Number(Number(priceTotal).toFixed(2)),
       order_id: newOrder,
-      products: allProducts,
+      products: allProductsOrder,
     });
     await this.orderDetailsRepository.save(orderDetail);
 
@@ -80,11 +82,13 @@ export class OrdersService {
     });
     updateOrder.order_detail = orderDetail;
     await this.ordersRepository.save(updateOrder);
+
     return this.ordersRepository.findOne({
       where: { id: updateOrder.id },
       relations: {
         order_detail: true,
       },
     });
+    
   }
 }

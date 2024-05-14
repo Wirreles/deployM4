@@ -36,7 +36,7 @@ class Products {
 
        /**
      * preciop unitario del producto
-     * @example 15.00
+     * @example "15.00"
      */
     @Column({
         type: 'decimal',

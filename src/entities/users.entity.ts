@@ -65,13 +65,14 @@ class User {
 
     /**
      * País del usuario.
-     * @example USA
+     * @example United Estates
      */
     @Column({
         type: 'varchar',
         length: 50,
+        nullable:true
     })
-    country?: string | undefined
+    country: string 
 
     /**
      * Ciudad del usuario.
@@ -80,8 +81,9 @@ class User {
     @Column({
         type: 'varchar',
         length: 50,
+        nullable:true
     })
-    city?: string | undefined
+    city: string
 
     /**
      * Órdenes realizadas por el usuario.
@@ -95,7 +97,7 @@ class User {
      */
     @Column({
         type: 'varchar',
-        default: "admin", 
+        default: "user", 
         nullable: false
     })
     isAdmin: string

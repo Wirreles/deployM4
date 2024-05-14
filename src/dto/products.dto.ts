@@ -1,14 +1,23 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import {
   IsDecimal,
+  IsEmpty,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
-  IsUrl,
+  IsUUID,
   Length,
 } from 'class-validator';
 import Categories from 'src/entities/categories.entity';
 
 export class ProductsDto {
+
+   @ApiHideProperty()
+   @IsUUID()
+   @IsOptional()
+   id:string
+   
     /**
     * es un string de 50 caracteres como mucho, tiene que ser unico, y tiene que existir si o si
      * @example Escobillon
@@ -29,7 +38,7 @@ export class ProductsDto {
 
        /**
      * preciop unitario del producto
-     * @example 15.00
+     * @example "15.00"
      */
   @IsNotEmpty()
   @IsDecimal()
@@ -54,5 +63,11 @@ export class ProductsDto {
    * categoria asignada al crear el producto
    * @example smarthpone
    */
-  category: Categories
+  @IsString()
+  @IsNotEmpty()
+  category_name: string;
+
+  @IsEmpty()
+  @ApiHideProperty()
+  category: Categories;
 }

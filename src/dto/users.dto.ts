@@ -1,5 +1,5 @@
 import { ApiHideProperty } from "@nestjs/swagger"
-import { IsEmail, IsEmpty, IsInt, IsNotEmpty, IsString, Length, Matches } from "class-validator"
+import { IsEmail, IsEmpty, IsInt, IsNotEmpty, IsOptional, IsString, Length, Matches } from "class-validator"
 
 export class UserDto {   
     /**
@@ -57,19 +57,21 @@ export class UserDto {
 
     /**
      * País del usuario.
-     * @example "USA"
+     * @example "United Estates"
      */
+    @IsOptional()
     @IsString()
     @Length(5,20)
-    country?: string | undefined
+    country: string
 
     /**
      * Ciudad del usuario.
      * @example "New York"
      */
+    @IsOptional()
     @IsString()
     @Length(5,20)
-    city?: string | undefined
+    city: string
     
     /**
      * Propiedad para ocultar el estado de administrador.

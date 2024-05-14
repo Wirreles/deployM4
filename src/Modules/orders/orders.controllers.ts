@@ -13,6 +13,7 @@ import {
 import { OrderDto } from '../../dto/orders.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+
 @ApiTags('orders')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -31,4 +32,5 @@ export class OrdersController {
   addOrders(@Body() order: OrderDto) {
     return this.ordersService.addOrders(order);
   }
+
 }

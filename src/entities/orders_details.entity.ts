@@ -16,7 +16,7 @@ class OrderDetails {
 
     /**
      * Precio del detalle de la orden.
-     * @example 25.50
+     * @example "25.50"
      */
     @Column({
         type: "decimal"

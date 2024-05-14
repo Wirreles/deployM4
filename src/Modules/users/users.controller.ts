@@ -16,7 +16,7 @@ import { UserDto } from '../../dto/users.dto';
 import { RolesGuard } from 'src/guards/roles.guards';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
-import { ApiBearerAuth,ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth,ApiQuery,ApiTags } from '@nestjs/swagger';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -26,9 +26,11 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @HttpCode(200)
-  @Get()
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
+  @Get()
+  @ApiQuery({ name: 'page', description: 'Página a mostrar', required: false })
+  @ApiQuery({ name: 'limit', description: 'Límite de resultados por página', required: false})
   getUsers(@Query('limit') limit: string, @Query('page') page: string) {
     if (page && limit) {
       return this.usersService.getUsers(Number(limit), Number(page));
@@ -43,15 +45,19 @@ export class UsersController {
   }
 
   @HttpCode(200)
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuard)
   @Put(':id')
   updateUsers(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() user: Partial<UserDto>,
+    @Body() user: UserDto,
   ) {
     return this.usersService.updateUsers(id, user);
   }
 
   @HttpCode(200)
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuard)
   @Delete(':id')
   deleteUsers(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.deleteUsers(id);
@@ -59,7 +65,7 @@ export class UsersController {
 
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
-  @Put(":id")
+  @Put("admin/:id")
   updateAdmin(@Param('id', ParseUUIDPipe) id: string){
     return this.usersService.updateAdmin(id);
   }

@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/AuthGuard';
 import { RolesGuard } from 'src/guards/roles.guards';
 import { Roles } from 'src/roles/roles.decorator';
@@ -11,6 +11,7 @@ import { SeederService } from './seeder.services';
 export class SeederController {
   constructor(private readonly seederServices: SeederService) {}
 
+  @ApiBearerAuth()
   @HttpCode(200)
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -19,6 +20,7 @@ export class SeederController {
     return this.seederServices.addProductSeeder();
   }
 
+  @ApiBearerAuth()
   @HttpCode(200)
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)
@@ -26,7 +28,8 @@ export class SeederController {
   addCategoriesSeeder() {
     return this.seederServices.addCategoriesSeeder();
   }
-
+  
+  @ApiBearerAuth()
   @HttpCode(200)
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)
