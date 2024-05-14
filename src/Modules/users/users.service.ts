@@ -6,7 +6,7 @@ import {
 import User from '../../entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserDto } from '../../dto/users.dto';
+import { UpdateUserDto } from '../../dto/users.dto';
 @Injectable()
 export class UsersService {
   constructor(
@@ -37,7 +37,7 @@ export class UsersService {
       return { message: 'El usuario ha sido eliminado' };
     }
 
-  async updateUsers(id: string, user: UserDto): Promise<Object> {
+  async updateUsers(id: string, user: UpdateUserDto): Promise<Object> {
       const usuario: User = await this.userRepository.findOneBy({ id });
       if (!usuario)
         throw new BadRequestException(`El usuario con id: ${id} no existe`);

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/guards/AuthGuard';
-import { UserDto } from '../../dto/users.dto';
+import { UpdateUserDto, UserDto } from '../../dto/users.dto';
 import { RolesGuard } from 'src/guards/roles.guards';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
@@ -50,7 +50,7 @@ export class UsersController {
   @Put(':id')
   updateUsers(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() user: UserDto,
+    @Body() user: UpdateUserDto,
   ) {
     return this.usersService.updateUsers(id, user);
   }

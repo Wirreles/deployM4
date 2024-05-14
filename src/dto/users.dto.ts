@@ -1,5 +1,6 @@
 import { ApiHideProperty } from "@nestjs/swagger"
 import { IsEmail, IsEmpty, IsInt, IsNotEmpty, IsOptional, IsString, Length, Matches } from "class-validator"
+import { PickType } from '@nestjs/swagger';
 
 export class UserDto {   
     /**
@@ -79,4 +80,8 @@ export class UserDto {
     @ApiHideProperty()
     @IsEmpty()
     isAdmin:string
+}
+
+export class UpdateUserDto extends PickType(UserDto, ['name','country','city','phone', 'address'] ){
+
 }
